@@ -35,5 +35,3 @@ MoveCursor(Point, TimeSpan)
 ```
 
 Moves the cursor to a point
-
----
