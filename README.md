@@ -1,5 +1,6 @@
 ## Kalon
 
+![](https://github.com/Dewera/Kalon/workflows/Continuous%20Integration/badge.svg)
 
 A humanlike cursor movement library that uses randomised bezier curves for path generation
 
