@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>8</LangVersion>
+        <Nullable>enable</Nullable>
+        <Authors>Dewera</Authors>
+        <Description>A humanlike cursor movement library that uses randomised bezier curves for path generation</Description>
+        <RepositoryUrl>https://github.com/Dewera/Kalon</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\Kalon.xml</DocumentationFile>
+    </PropertyGroup>
+
+</Project>
