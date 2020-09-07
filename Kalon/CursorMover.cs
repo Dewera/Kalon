@@ -157,9 +157,9 @@ namespace Kalon
 
             Point GenerateControlPoint()
             {
-                var x = start.X + arcMultiplier * Math.Abs(end.X - start.X) * 0.01 * _random.Next(15, 30);
+                var x = start.X + arcMultiplier * (Math.Abs(end.X - start.X) + 50) * 0.01 * _random.Next(15, 30);
 
-                var y = start.Y + arcMultiplier * Math.Abs(end.Y - start.Y) * 0.01 * _random.Next(15, 30);
+                var y = start.Y + arcMultiplier * (Math.Abs(end.Y - start.Y) + 50) * 0.01 * _random.Next(15, 30);
 
                 return new Point((int) x, (int) y);
             }

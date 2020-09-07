@@ -8,18 +8,18 @@ A humanlike cursor movement library that uses randomised bezier curves for path 
 
 ### Caveats
 
-- The time taken to generate a randomised path differs based on many factors and, hence, the provided delay applies exclusively to the movement of the cursor, rather than the total runtime of the method
+- The provided delay applies exclusively to the movement of the cursor rather than the total runtime of the method
 
 ---
 
 ### Getting started
 
-The example below demonstrates a basic implementation of the library that moves the cursor to the point (185, 235) in 800 milliseconds
+The example below demonstrates a basic implementation of the library
 
 ```c#
-var point = new Point(185, 235);
+var point = new Point(0, 0);
 
-var delay = TimeSpan.FromMilliseconds(800);
+var delay = TimeSpan.FromMilliseconds(0);
 
 CursorMover.MoveCursor(point, delay);
 ```
@@ -28,10 +28,16 @@ CursorMover.MoveCursor(point, delay);
 
 ### CursorMover Class
 
-#### Methods
+Provides the functionality to move the cursor in a human realistic manner
+
+```c#
+public static class CursorMover
+```
+
+### Methods
+
+Moves the cursor to a point
 
 ```c#
 MoveCursor(Point, TimeSpan)
 ```
-
-Moves the cursor to a point
