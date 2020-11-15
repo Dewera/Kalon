@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Kalon.Native.PInvoke;
+using Kalon.Structures;
 
 [assembly: CLSCompliant(true)]
 
@@ -44,7 +45,7 @@ namespace Kalon
                 throw new Win32Exception();
             }
 
-            var cursorMovements = GenerateMovements(currentCursorPosition, point, (int) timeSpan.TotalMilliseconds).ToArray();
+            var cursorMovements = GenerateMovements(currentCursorPosition, point, (int) timeSpan.TotalMilliseconds);
 
             // Perform the movements
 
@@ -68,22 +69,20 @@ namespace Kalon
 
         private static IEnumerable<Movement> GenerateMovements(Point start, Point end, int milliseconds)
         {
-            IEnumerable<int> FisherYatesShuffle(IEnumerable<int> collection, int elements)
+            IEnumerable<int> FisherYatesShuffle(IList<int> collection, int elements)
             {
-                var array = collection.ToArray();
-
-                for (var elementIndex = 0; elementIndex < array.Length; elementIndex += 1)
+                for (var elementIndex = 0; elementIndex < collection.Count; elementIndex += 1)
                 {
                     var randomIndex = _random.Next(0, elementIndex);
 
-                    var currentValue = array[elementIndex];
+                    var currentValue = collection[elementIndex];
 
-                    array[elementIndex] = array[randomIndex];
+                    collection[elementIndex] = collection[randomIndex];
 
-                    array[randomIndex] = currentValue;
+                    collection[randomIndex] = currentValue;
                 }
 
-                return array.Take(elements);
+                return collection.Take(elements);
             }
 
             var pathPoints = GeneratePath(start, end).ToArray();
@@ -98,7 +97,7 @@ namespace Kalon
 
                 // Randomly distribute the remaining points using a Fisher Yates shuffle
 
-                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, milliseconds), remainingPoints).ToHashSet();
+                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, milliseconds).ToArray(), remainingPoints).ToHashSet();
 
                 // Initialise the movements
 
@@ -129,7 +128,7 @@ namespace Kalon
 
                 // Randomly distribute the remaining milliseconds using a Fisher Yates shuffle
 
-                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, pathPoints.Length), remainingMilliseconds).ToHashSet();
+                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, pathPoints.Length).ToArray(), remainingMilliseconds).ToHashSet();
 
                 // Initialise the movements
 
