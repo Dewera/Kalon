@@ -24,7 +24,7 @@ namespace Kalon
         }
 
         /// <summary>
-        /// Moves the cursor to a point
+        /// Moves the cursor to a point in a timespan
         /// </summary>
         public static void MoveCursor(Point point, TimeSpan timeSpan)
         {
