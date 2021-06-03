@@ -9,6 +9,13 @@ namespace Kalon.Tests
 {
     public sealed class CursorMoverTests
     {
+        private readonly int _runtimeBuffer;
+
+        public CursorMoverTests()
+        {
+            _runtimeBuffer = 80;
+        }
+
         [Theory]
         [InlineData(0, 0, 20)]
         [InlineData(83, 27, 150)]
@@ -16,17 +23,17 @@ namespace Kalon.Tests
         [InlineData(100, 100, 1200)]
         [InlineData(250, 400, 3500)]
         [InlineData(400, 250, 8000)]
-        public void TestDelay(int x, int y, int milliseconds)
+        public void TestRuntime(int x, int y, int milliseconds)
         {
             var point = new Point(x, y);
-
             var stopwatch = Stopwatch.StartNew();
 
             CursorMover.MoveCursor(point, TimeSpan.FromMilliseconds(milliseconds));
-
             stopwatch.Stop();
 
-            Assert.InRange(stopwatch.ElapsedMilliseconds, milliseconds, milliseconds + 80);
+            // The runtime duration needs to be buffered to account for the movement initialisation
+
+            Assert.InRange(stopwatch.ElapsedMilliseconds, milliseconds, milliseconds + _runtimeBuffer);
         }
 
         [Theory]

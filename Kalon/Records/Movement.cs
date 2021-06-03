@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Kalon.Structures
+namespace Kalon.Records
 {
     internal sealed record Movement(TimeSpan Delay, IEnumerable<Point> Points);
 }

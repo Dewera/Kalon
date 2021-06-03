@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Kalon.Native.PInvoke;
-using Kalon.Structures;
+using Kalon.Records;
 
 [assembly: CLSCompliant(true)]
 
@@ -38,7 +38,7 @@ namespace Kalon
                 throw new ArgumentException("The provided timespan was invalid");
             }
 
-            // Generate a randomised set of movements from the current cursor position to the point
+            // Generate a randomised set of movements between the current cursor position and the point
 
             if (!User32.GetCursorPos(out var currentCursorPosition))
             {
@@ -47,7 +47,7 @@ namespace Kalon
 
             var cursorMovements = GenerateMovements(currentCursorPosition, point, (int) timeSpan.TotalMilliseconds);
 
-            // Perform the movements
+            // Move the cursor
 
             var stopwatch = Stopwatch.StartNew();
 
@@ -74,30 +74,27 @@ namespace Kalon
                 for (var elementIndex = 0; elementIndex < collection.Count; elementIndex += 1)
                 {
                     var randomIndex = _random.Next(0, elementIndex);
-
                     var currentValue = collection[elementIndex];
 
                     collection[elementIndex] = collection[randomIndex];
-
                     collection[randomIndex] = currentValue;
                 }
 
                 return collection.Take(elements);
             }
 
-            var pathPoints = GeneratePath(start, end).ToArray();
+            // Generate the path points
 
-            if (milliseconds <= pathPoints.Length)
+            var pathPoints = GeneratePath(start, end).ToList();
+
+            if (milliseconds <= pathPoints.Count)
             {
-                var pointsPerMovement = pathPoints.Length / milliseconds;
-
-                // Determine the amount of remaining points that need to be distributed between the movements
-
-                var remainingPoints = pathPoints.Length - milliseconds * pointsPerMovement;
+                var pointsPerMovement = pathPoints.Count / milliseconds;
 
                 // Randomly distribute the remaining points using a Fisher Yates shuffle
 
-                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, milliseconds).ToArray(), remainingPoints).ToHashSet();
+                var remainingPoints = pathPoints.Count - milliseconds * pointsPerMovement;
+                var distributionIndices = FisherYatesShuffle(Enumerable.Range(0, milliseconds).ToArray(), remainingPoints).ToHashSet();
 
                 // Initialise the movements
 
@@ -107,7 +104,7 @@ namespace Kalon
                 {
                     var movementPoints = pointsPerMovement;
 
-                    if (distributionIndexes.Contains(movementIndex))
+                    if (distributionIndices.Contains(movementIndex))
                     {
                         movementPoints += 1;
                     }
@@ -120,19 +117,16 @@ namespace Kalon
 
             else
             {
-                var delayPerMovement = milliseconds / pathPoints.Length;
-
-                // Determine the amount of remaining milliseconds that need to be distributed between the movements
-
-                var remainingMilliseconds = milliseconds - pathPoints.Length * delayPerMovement;
+                var delayPerMovement = milliseconds / pathPoints.Count;
 
                 // Randomly distribute the remaining milliseconds using a Fisher Yates shuffle
 
-                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, pathPoints.Length).ToArray(), remainingMilliseconds).ToHashSet();
+                var remainingMilliseconds = milliseconds - pathPoints.Count * delayPerMovement;
+                var distributionIndexes = FisherYatesShuffle(Enumerable.Range(0, pathPoints.Count).ToArray(), remainingMilliseconds).ToHashSet();
 
                 // Initialise the movements
 
-                for (var movementIndex = 0; movementIndex < pathPoints.Length; movementIndex += 1)
+                for (var movementIndex = 0; movementIndex < pathPoints.Count; movementIndex += 1)
                 {
                     var movementDelay = delayPerMovement;
 
@@ -148,16 +142,16 @@ namespace Kalon
 
         private static IEnumerable<Point> GeneratePath(Point start, Point end)
         {
+            yield return start;
+
             // Generate randomised control points with a displacement of 15% to 30% between the start and end points
 
             var arcMultipliers = new[] {-1, 1};
-
             var arcMultiplier = arcMultipliers[_random.Next(arcMultipliers.Length)];
 
             Point GenerateControlPoint()
             {
                 var x = start.X + arcMultiplier * (Math.Abs(end.X - start.X) + 50) * 0.01 * _random.Next(15, 30);
-
                 var y = start.Y + arcMultiplier * (Math.Abs(end.Y - start.Y) + 50) * 0.01 * _random.Next(15, 30);
 
                 return new Point((int) x, (int) y);
@@ -169,21 +163,19 @@ namespace Kalon
 
             var binomialCoefficients = new[] {1, 3, 3, 1};
 
-            yield return start;
-
             for (var pointIndex = 0; pointIndex < 4998; pointIndex += 1)
             {
                 var tValue = pointIndex / 4998d;
 
                 var x = 0d;
-
                 var y = 0d;
 
                 for (var anchorPointIndex = 0; anchorPointIndex < anchorPoints.Length; anchorPointIndex += 1)
                 {
-                    x += anchorPoints[anchorPointIndex].X * binomialCoefficients[anchorPointIndex] * Math.Pow(1 - tValue, 3 - anchorPointIndex) * Math.Pow(tValue, anchorPointIndex);
+                    var binomialMultiplier = binomialCoefficients[anchorPointIndex] * Math.Pow(1 - tValue, 3 - anchorPointIndex) * Math.Pow(tValue, anchorPointIndex);
 
-                    y += anchorPoints[anchorPointIndex].Y * binomialCoefficients[anchorPointIndex] * Math.Pow(1 - tValue, 3 - anchorPointIndex) * Math.Pow(tValue, anchorPointIndex);
+                    x += anchorPoints[anchorPointIndex].X * binomialMultiplier;
+                    y += anchorPoints[anchorPointIndex].Y * binomialMultiplier;
                 }
 
                 yield return new Point((int) x, (int) y);
