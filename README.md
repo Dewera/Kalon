@@ -26,7 +26,6 @@ The example below demonstrates a basic implementation of the library
 
 ```c#
 var point = new Point(0, 0);
-
 var delay = TimeSpan.FromMilliseconds(0);
 
 CursorMover.MoveCursor(point, delay);
