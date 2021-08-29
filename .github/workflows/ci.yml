@@ -2,9 +2,9 @@ name: Continuous Integration
 
 on:
     push:
-        branches: [master]
+      branches: [master]
     pull_request:
-        branches: [master]
+      branches: [master]
 
 jobs:
   build:
@@ -34,9 +34,9 @@ jobs:
       
       - uses: actions/setup-dotnet@v1
         with:
-            source-url: https://nuget.pkg.github.com/${{github.actor}}
+          source-url: https://nuget.pkg.github.com/${{github.actor}}
         env:
-            NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Publish Package
         run: dotnet nuget push 'Kalon\bin\Release\*.nupkg' --skip-duplicate

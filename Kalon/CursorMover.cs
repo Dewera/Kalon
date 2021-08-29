@@ -7,8 +7,6 @@ using System.Linq;
 using Kalon.Native.PInvoke;
 using Kalon.Records;
 
-[assembly: CLSCompliant(true)]
-
 namespace Kalon
 {
     /// <summary>
@@ -51,14 +49,14 @@ namespace Kalon
 
             var stopwatch = Stopwatch.StartNew();
 
-            foreach (var movement in cursorMovements)
+            foreach (var (delay, points) in cursorMovements)
             {
-                if (movement.Points.Any(movementPoint => !User32.SetCursorPos(movementPoint.X, movementPoint.Y)))
+                if (points.Any(movementPoint => !User32.SetCursorPos(movementPoint.X, movementPoint.Y)))
                 {
                     throw new Win32Exception();
                 }
 
-                while (stopwatch.ElapsedMilliseconds < movement.Delay.Milliseconds)
+                while (stopwatch.ElapsedMilliseconds < delay.Milliseconds)
                 {
                     // Wait
                 }
@@ -74,10 +72,7 @@ namespace Kalon
                 for (var elementIndex = 0; elementIndex < collection.Count; elementIndex += 1)
                 {
                     var randomIndex = _random.Next(0, elementIndex);
-                    var currentValue = collection[elementIndex];
-
-                    collection[elementIndex] = collection[randomIndex];
-                    collection[randomIndex] = currentValue;
+                    (collection[elementIndex], collection[randomIndex]) = (collection[randomIndex], collection[elementIndex]);
                 }
 
                 return collection.Take(elements);

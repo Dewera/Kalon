@@ -13,7 +13,7 @@ namespace Kalon.Tests
 
         public CursorMoverTests()
         {
-            _runtimeBuffer = 80;
+            _runtimeBuffer = 100;
         }
 
         [Theory]
