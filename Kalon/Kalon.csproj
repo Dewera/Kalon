@@ -4,11 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
-        <Authors>Dewera</Authors>
-        <Description>A humanlike cursor movement library that uses randomised bezier curves for path generation</Description>
-        <RepositoryUrl>https://github.com/Dewera/Kalon</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageVersion>1.2.0</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
