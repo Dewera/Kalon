@@ -144,7 +144,7 @@ public static class CursorMover
 
         var anchorPoints = new[] { start, GenerateControlPoint(), GenerateControlPoint(), end };
 
-        // Generate 5000 third order Bezier curve using De Casteljau's algorithm
+        // Generate 5000 points of a third order Bezier curve using De Casteljau's algorithm
 
         var binomialCoefficients = new[] { 1, 3, 3, 1 };
 
