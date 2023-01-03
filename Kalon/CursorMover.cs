@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using Kalon.Native.PInvoke;
+using Kalon.Native.Structs;
 using Kalon.Records;
 
 namespace Kalon;
@@ -12,13 +12,13 @@ namespace Kalon;
 public static class CursorMover
 {
     /// <summary>
-    /// Moves the cursor to a point in a timespan
+    /// Moves the cursor to a set of coordinates in a timespan
     /// </summary>
-    public static void MoveCursor(Point point, TimeSpan timeSpan)
+    public static void MoveCursor(int x, int y, TimeSpan timeSpan)
     {
-        if (point.X < 0 || point.Y < 0)
+        if (x < 0 || y < 0)
         {
-            throw new ArgumentException("The provided point was invalid");
+            throw new ArgumentException("The provided coordinates were invalid");
         }
 
         if (timeSpan.TotalMilliseconds <= 0)
@@ -33,7 +33,7 @@ public static class CursorMover
             throw new Win32Exception();
         }
 
-        var cursorMovements = GenerateMovements(currentCursorPosition, point, (int) timeSpan.TotalMilliseconds);
+        var cursorMovements = GenerateMovements(currentCursorPosition, new Point(x, y), (int) timeSpan.TotalMilliseconds);
 
         // Move the cursor
 

@@ -1,7 +1,5 @@
 ## Kalon
 
-![](https://github.com/Dewera/Kalon/workflows/Continuous%20Integration/badge.svg)
-
 A humanlike cursor movement library that uses randomised bezier curves for path generation
 
 ---
@@ -25,10 +23,8 @@ The image below demonstrates some generated movements between a set of points
 The example below demonstrates a basic implementation of the library
 
 ```c#
-var point = new Point(0, 0);
 var delay = TimeSpan.FromMilliseconds(0);
-
-CursorMover.MoveCursor(point, delay);
+CursorMover.MoveCursor(0, 0, delay);
 ```
 
 ---
@@ -43,8 +39,8 @@ public static class CursorMover
 
 ### Methods
 
-Moves the cursor to a point in a timespan
+Moves the cursor to a set of coordinates in a timespan
 
 ```c#
-public static void MoveCursor(Point, TimeSpan);
+public static void MoveCursor(int, int, TimeSpan);
 ```

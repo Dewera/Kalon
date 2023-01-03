@@ -1,10 +1,11 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using Kalon.Tests.Native.Structs;
 
 namespace Kalon.Tests.Native.PInvoke;
 
-internal static class User32
+internal static partial class User32
 {
-    [DllImport("user32.dll", SetLastError = true)]
-    internal static extern bool GetCursorPos(out Point point);
+    [LibraryImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool GetCursorPos(out Point point);
 }

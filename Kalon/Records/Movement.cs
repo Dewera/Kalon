@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Kalon.Native.Structs;
 
 namespace Kalon.Records;
 

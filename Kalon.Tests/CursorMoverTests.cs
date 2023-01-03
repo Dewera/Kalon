@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using Kalon.Tests.Native.PInvoke;
+using Kalon.Tests.Native.Structs;
 using Xunit;
 
 namespace Kalon.Tests;
@@ -24,10 +24,9 @@ public sealed class CursorMoverTests
     [InlineData(400, 250, 8000)]
     public void TestRuntime(int x, int y, int milliseconds)
     {
-        var point = new Point(x, y);
         var stopwatch = Stopwatch.StartNew();
 
-        CursorMover.MoveCursor(point, TimeSpan.FromMilliseconds(milliseconds));
+        CursorMover.MoveCursor(x, y, TimeSpan.FromMilliseconds(milliseconds));
         stopwatch.Stop();
 
         // The runtime duration needs to be buffered to account for the movement initialisation
@@ -44,15 +43,13 @@ public sealed class CursorMoverTests
     [InlineData(400, 250)]
     public void TestMovement(int x, int y)
     {
-        var point = new Point(x, y);
-
-        CursorMover.MoveCursor(point, TimeSpan.FromMilliseconds(1));
+        CursorMover.MoveCursor(x, y, TimeSpan.FromMilliseconds(1));
 
         if (!User32.GetCursorPos(out var currentCursorPosition))
         {
             throw new Win32Exception();
         }
 
-        Assert.Equal(point, currentCursorPosition);
+        Assert.Equal(new Point(x, y), currentCursorPosition);
     }
 }
